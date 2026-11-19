@@ -3,20 +3,87 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
+<title>Vice Cover Maker — GTA-style poster covers</title>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <main class="app">
-  <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
-    <p id="status" role="status"></p>
+  <section class="controls" aria-label="Cover controls">
+    <header>
+      <h1>Vice Cover Maker</h1>
+      <p>Your photo + a caption, turned into a multi-panel poster cover with a
+      Vice City sunset or neon grade. Everything stays on your machine.</p>
+    </header>
+
+    <fieldset>
+      <legend>1 · Photos</legend>
+      <div class="slots">
+        <div class="slot" id="slot-0">
+          <label class="thumb" for="photo-0">A</label>
+          <input id="photo-0" type="file" accept="image/*">
+          <span class="slot-name">Photo A</span>
+          <button type="button" class="fill-all">Use in all panels</button>
+        </div>
+        <div class="slot" id="slot-1">
+          <label class="thumb" for="photo-1">B</label>
+          <input id="photo-1" type="file" accept="image/*">
+          <span class="slot-name">Photo B</span>
+          <button type="button" class="fill-all">Use in all panels</button>
+        </div>
+        <div class="slot" id="slot-2">
+          <label class="thumb" for="photo-2">C</label>
+          <input id="photo-2" type="file" accept="image/*">
+          <span class="slot-name">Photo C</span>
+          <button type="button" class="fill-all">Use in all panels</button>
+        </div>
+      </div>
+      <p class="hint">Or pick a sample photo below the preview to start right away.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>2 · Layout</legend>
+      <div class="options" id="layout-picker"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>3 · Colour grade</legend>
+      <div class="options" id="grade-picker"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>4 · Caption</legend>
+      <label>Title <input id="title" type="text" maxlength="32" value="Sunset Heist"></label>
+      <label>Subtitle <input id="subtitle" type="text" maxlength="48" value="A Vice City Story"></label>
+      <label>Tag <input id="tag" type="text" maxlength="20" value="Vice City"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>5 · Crop the selected panel</legend>
+      <div class="options" id="panel-picker"></div>
+      <p id="panel-photo" role="status"></p>
+      <label>Zoom <input id="zoom" type="range" min="1" max="2.5" step="0.05" value="1">
+        <span id="zoom-val">100%</span></label>
+      <p class="hint">Drag the preview to move the photo inside its panel.</p>
+      <button id="reset-crop" type="button">Reset crop</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>6 · Export</legend>
+      <div class="options" id="size-picker"></div>
+      <button id="export" type="button" class="primary">Export PNG</button>
+      <p id="status" role="status"></p>
+    </fieldset>
   </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
+
+  <section class="preview" aria-label="Cover preview">
+    <canvas id="cover" aria-label="The cover preview"></canvas>
+    <div class="samples">
+      <span>Try a sample:</span>
+      <button type="button" data-sample="pier" data-slot="0">Pier → A</button>
+      <button type="button" data-sample="boulevard" data-slot="1">Boulevard → B</button>
+      <button type="button" data-sample="pier" data-slot="2">Pier → C</button>
+    </div>
+  </section>
 </main>
 <script type="module" src="./src/main.js"></script>
 </body>
