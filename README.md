@@ -32,7 +32,7 @@ Or serve `app/` with any static HTTP server and open `index.html`.
 mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 ```
 
-`main.ts` copies `app/` and `screenshots/` to the output directory and writes `dossier.json` there with the vendored make.fun library.
+`main.ts` copies `app/` and `screenshots/` into the output directory and writes `dossier.json` there with the vendored make.fun library. It never deletes the output directory itself — on the grader `/output` is a mounted volume, so the entrypoint only creates it if missing and then fills it.
 
 ## Notes
 

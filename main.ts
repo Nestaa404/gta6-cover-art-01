@@ -12,8 +12,14 @@
 // Node 22+, standard library only. Run it twice and the output is
 // byte-identical: the copy is a plain file copy and the dossier is
 // canonical JSON of the same tree.
+//
+// The output directory itself is never removed or recreated here. In the
+// grader /output is a volume mount, so deleting it (or trying to recreate
+// it after deleting it) fails on a read-only mount and kills the run.
+// This entrypoint only creates the directory if it is missing and then
+// fills it — exactly like the starter kit does.
 
-import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-app.ts';
@@ -27,9 +33,13 @@ if (!existsSync(appDir)) {
   throw new Error(`app/ is missing next to main.ts (${appDir})`);
 }
 
-// Start from a clean output tree so a stale file from an earlier run can
-// never survive into the handed-in entry.
-rmSync(outDir, { recursive: true, force: true });
+// Make sure the output directory exists, then fill it. Never delete it:
+// on the grader it is a mounted volume, and removing a mount point (or
+// recreating it afterwards) fails. If the path exists but is a plain file
+// instead of a directory, fail loudly rather than copying into nowhere.
+if (existsSync(outDir) && !statSync(outDir).isDirectory()) {
+  throw new Error(`output path ${outDir} exists and is not a directory`);
+}
 mkdirSync(outDir, { recursive: true });
 cpSync(appDir, join(outDir, 'app'), { recursive: true });
 if (existsSync(shotsDir)) {

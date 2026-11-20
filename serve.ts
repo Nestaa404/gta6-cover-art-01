@@ -13,13 +13,19 @@ import { createServer } from 'node:http';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// The folder served, resolved once at startup so every request is checked
+// against the same absolute root.
 const appRoot = resolve(fileURLToPath(new URL('./app', import.meta.url)));
 
+// Parse the optional --port flag; anything missing or out of range falls
+// back to the default 8080 instead of crashing the server.
 const cliArgs = process.argv.slice(2);
 const portFlag = cliArgs.indexOf('--port');
 const wanted = portFlag === -1 ? 8080 : Number(cliArgs[portFlag + 1]);
 const port = Number.isInteger(wanted) && wanted > 0 && wanted < 65536 ? wanted : 8080;
 
+// Content types for the file kinds an offline web app needs. Anything
+// not listed here is served as a generic byte stream.
 const mimeByExt: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
@@ -50,8 +56,10 @@ const server = createServer((request, response) => {
     response.writeHead(400).end('bad request');
     return;
   }
+  // A trailing slash means the folder's index page.
   if (pathname.endsWith('/')) pathname += 'index.html';
   const file = resolve(join(appRoot, normalize(pathname)));
+  // Refuse anything that escapes app/, including ".." tricks.
   if (file !== appRoot && !file.startsWith(appRoot + sep)) {
     response.writeHead(403).end('forbidden');
     return;
