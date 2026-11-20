@@ -4,16 +4,25 @@
 //   ?shot=cover   — the finished cover alone, full-bleed
 //
 // `photo` picks the sample (samples/<photo>.jpg) and `caption` the words
-// on the cover. Layout and grade come from the page state, which main.js
-// reads from the same query before calling this. window.__shotReady is
-// set once the scene has painted twice, so a screenshot tool knows the
-// frame is settled and can capture it.
-export async function runShot(shot, query, load) {
-  // The cover scene hides the editor chrome and shows only the poster.
-  if (shot === 'cover') document.body.classList.add('shot-cover');
-  const photo = query.get('photo') ?? 'pier';
-  const caption = query.get('caption') ?? 'Sunset Heist';
-  await load(`samples/${photo}.jpg`, caption);
-  // Two animation frames: one for the load to land, one for the paint.
-  requestAnimationFrame(() => requestAnimationFrame(() => { window.__shotReady = true; }));
+// on the cover. Plan and tone come from the page state, which main.js
+// reads from the same query before staging the scene.
+//
+// Once the scene has painted, window.__shotReady is set: a screenshot
+// tool can poll for it instead of guessing a delay. The double
+// requestAnimationFrame gives the image load one frame to land and the
+// paint one frame to settle.
+
+export async function stageScene(kind, params, fill) {
+  if (kind === 'cover') {
+    document.body.classList.add('shot-cover');
+  }
+  const photo = params.get('photo') || 'pier';
+  const words = params.get('caption') || 'Sunset Heist';
+  await fill(`samples/${photo}.jpg`, words);
+  const settle = () =>
+    new Promise((done) => {
+      requestAnimationFrame(() => requestAnimationFrame(done));
+    });
+  await settle();
+  window.__shotReady = true;
 }

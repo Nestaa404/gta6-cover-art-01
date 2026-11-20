@@ -4,38 +4,42 @@
 
 # Neon Coast Cover Studio
 
-Entry for make.fun bounty [gta6-cover-art-01](https://make.fun/bounty/gta6-cover-art-01) — a web app that turns your photo and a caption into GTA-style poster cover art.
+An entry for the make.fun bounty [gta6-cover-art-01](https://make.fun/bounty/gta6-cover-art-01): a web app that turns a photo and a caption into GTA-style poster cover art.
 
-## What it does
+## What you get
 
-- **Multi-panel poster look** — three layouts (Hero + duo, Sunset trio, Hero + strip), each panel holding its own photo.
-- **Any photo** — load the two built-in samples or your own photos from your machine (read locally, never uploaded). Fill all panels with one photo or mix several.
-- **Crop each panel** — zoom and pan sliders per panel, with a reset.
-- **Colour grades** — Vice Sunset, Neon Nights, Palm Noir, and Bubblegum washes over the whole poster, plus a vignette.
-- **Bold caption lettering** — a big italic caption banner, a sub-caption line, and a city tag, all editable.
-- **Fast export** — one click exports a PNG in the common post sizes: 1080 × 1080, 1080 × 1350, or 1920 × 1080.
+- **Four poster layouts** — Hero + duo, Sunset trio, Hero + strip, and Split top. Every layout holds three panels, and each panel keeps its own photo.
+- **Your photos, kept on your machine** — load the two bundled samples, or drop in your own images. A button fills any empty panels with one sample, or mix several photos across the panels.
+- **A crop per panel** — zoom and pan sliders for the panel you have selected, with a one-click reset.
+- **Five colour tones** — Vice Sunset, Neon Nights, Palm Noir, Bubblegum, and Golden Hour wash over the whole poster, with a vignette that sinks the corners.
+- **Caption presets and free words** — three one-tap presets (Sunset Heist, Boulevard Queen, Vice Nights) set the headline, sub-caption, and city tag together; every field stays editable after that.
+- **One-click PNG export** — Square 1080 × 1080, Portrait 1080 × 1350, or Wide 1920 × 1080.
 
-## Try it
+## Running it
 
-No build step, no network — the app is static files under `app/`:
+No build step and no network — the app is plain static files under `app/`:
 
 ```sh
 node serve.ts
-# open http://localhost:8080
+# then open http://localhost:8080
 ```
 
-Or serve `app/` with any static HTTP server and open `index.html`.
+Any static file server pointed at `app/` works the same way.
 
-## Hand it in
+## Handing it in
 
 ```sh
 mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 ```
 
-`main.ts` copies `app/` and `screenshots/` into the output directory and writes `dossier.json` there with the vendored make.fun library. It never deletes the output directory itself — on the grader `/output` is a mounted volume, so the entrypoint only creates it if missing and then fills it.
+`main.ts` mirrors `app/` and `screenshots/` into the output directory and writes `dossier.json` there with the vendored make.fun library. It only ever creates the output directory when it is missing and then fills it — it never removes it. On the grader `/output` is a mounted volume, so deleting or recreating it would fail; the starter kit follows the same rule. Run it twice into two directories and the trees come out byte-identical.
+
+## How the poster is painted
+
+`app/src/cover.js` holds the painter. Cropping works on the *source* rectangle: for each panel it finds the largest centred source window with the panel's aspect ratio, shrinks that window by the zoom factor, slides it by the pan, and maps it onto the panel — so zooming in can never leave a gap at the edges. The tone wash is a diagonal gradient drawn in `soft-light`, the headline is shrunk by binary search until it fits the banner, and the city chip, caption band, and vignette are drawn last.
 
 ## Notes
 
-- Original design and artwork: no Rockstar Games logo, wordmark, official artwork, character, or font. The "Neon Coast" city name is fictional, and the lettering uses system fonts.
+- Original design and artwork: no Rockstar Games logo, wordmark, official artwork, character, or font. "Neon Coast" is a fictional city, and the lettering uses system fonts.
 - The two sample photos under `app/samples/` were made for make.fun with an image model and are free to use.
-- Screenshots in `screenshots/` were taken from this app with headless Chrome; `shots.json` records the scene (URL query + window size) behind each one.
+- The screenshots in `screenshots/` were taken from this app with headless Chrome; `shots.json` records the scene (URL query plus window size) behind each one.

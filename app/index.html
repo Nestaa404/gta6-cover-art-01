@@ -7,83 +7,90 @@
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<main class="app">
-  <section class="controls" aria-label="Cover editor">
-    <h1>Neon Coast <span>Cover Studio</span></h1>
-    <p class="lede">Your photo + a caption, turned into a multi-panel poster-style cover. Everything runs on your machine — photos are never uploaded.</p>
+<div class="studio">
+  <aside class="editor" aria-label="Cover editor">
+    <header class="masthead">
+      <h1>Neon Coast <em>Cover Studio</em></h1>
+      <p class="intro">Your photo plus a caption, turned into a multi-panel poster-style cover. Everything runs on your machine — photos are never uploaded.</p>
+    </header>
 
-    <fieldset>
-      <legend>1 · Layout</legend>
-      <div id="layoutPicker" class="picker"></div>
-    </fieldset>
+    <section class="block">
+      <h2>1 · Layout</h2>
+      <div id="planRow" class="choices"></div>
+    </section>
 
-    <fieldset>
-      <legend>2 · Photos — pick a panel, then a photo</legend>
-      <div class="panel-tabs" role="tablist">
-        <button type="button" data-panel-tab="0" class="tab active">Panel 1</button>
-        <button type="button" data-panel-tab="1" class="tab">Panel 2</button>
-        <button type="button" data-panel-tab="2" class="tab">Panel 3</button>
+    <section class="block">
+      <h2>2 · Photos — pick a panel, then a photo</h2>
+      <div class="cell-tabs" role="tablist">
+        <button type="button" data-cell="0" class="cell-tab on">Panel 1</button>
+        <button type="button" data-cell="1" class="cell-tab">Panel 2</button>
+        <button type="button" data-cell="2" class="cell-tab">Panel 3</button>
       </div>
-      <div class="row">
-        <button id="samplePier" type="button">Sample: Pier</button>
-        <button id="sampleBoulevard" type="button">Sample: Boulevard</button>
+      <div class="btn-row">
+        <button id="usePier" type="button">Sample: Pier</button>
+        <button id="useBoulevard" type="button">Sample: Boulevard</button>
       </div>
-      <label class="file-label">Or your own photo
-        <input id="upload" type="file" accept="image/*">
+      <label class="field">Or your own photo
+        <input id="photoFile" type="file" accept="image/*">
       </label>
-      <div class="row">
-        <select id="fillSample" aria-label="Sample to fill empty panels with">
+      <div class="btn-row">
+        <select id="fillChoice" aria-label="Sample to fill empty panels with">
           <option value="pier">Pier</option>
           <option value="boulevard">Boulevard</option>
         </select>
-        <button id="fillAll" type="button">Fill empty panels</button>
+        <button id="fillEmpty" type="button">Fill empty panels</button>
       </div>
-    </fieldset>
+    </section>
 
-    <fieldset>
-      <legend>3 · Crop the selected panel</legend>
-      <label>Zoom <span id="zoomVal">100%</span>
-        <input id="zoom" type="range" min="0.5" max="3" step="0.05" value="1">
+    <section class="block">
+      <h2>3 · Crop the selected panel</h2>
+      <label class="field">Zoom <span id="zoomOut">100%</span>
+        <input id="zoomRange" type="range" min="0.5" max="3" step="0.05" value="1">
       </label>
-      <label>Pan left–right <span id="panxVal">0</span>
-        <input id="panx" type="range" min="-0.5" max="0.5" step="0.01" value="0">
+      <label class="field">Pan left–right <span id="panXOut">0</span>
+        <input id="panXRange" type="range" min="-0.5" max="0.5" step="0.01" value="0">
       </label>
-      <label>Pan up–down <span id="panyVal">0</span>
-        <input id="pany" type="range" min="-0.5" max="0.5" step="0.01" value="0">
+      <label class="field">Pan up–down <span id="panYOut">0</span>
+        <input id="panYRange" type="range" min="-0.5" max="0.5" step="0.01" value="0">
       </label>
-      <button id="resetCrop" type="button">Reset crop</button>
-    </fieldset>
+      <button id="cropReset" type="button">Reset crop</button>
+    </section>
 
-    <fieldset>
-      <legend>4 · Colour grade</legend>
-      <div id="gradePicker" class="picker"></div>
-    </fieldset>
+    <section class="block">
+      <h2>4 · Colour grade</h2>
+      <div id="toneRow" class="choices"></div>
+    </section>
 
-    <fieldset>
-      <legend>5 · Words</legend>
-      <label>Caption
-        <input id="caption" type="text" maxlength="40" value="Sunset Heist">
+    <section class="block">
+      <h2>5 · Words</h2>
+      <div class="choices">
+        <span class="preset-label">Presets:</span>
+        <span id="presetRow" class="choices"></span>
+      </div>
+      <label class="field">Caption
+        <input id="headlineInput" type="text" maxlength="40" value="Sunset Heist">
       </label>
-      <label>Sub-caption
-        <input id="subcaption" type="text" maxlength="60" value="Neon Coast • A story in three frames">
+      <label class="field">Sub-caption
+        <input id="strapInput" type="text" maxlength="60" value="Neon Coast • A story in three frames">
       </label>
-      <label>City tag
-        <input id="tag" type="text" maxlength="20" value="NEON COAST">
+      <label class="field">City tag
+        <input id="cityInput" type="text" maxlength="20" value="NEON COAST">
       </label>
-    </fieldset>
+    </section>
 
-    <fieldset>
-      <legend>6 · Export</legend>
-      <div id="sizePicker" class="picker"></div>
-      <button id="export" type="button" class="export">Export PNG</button>
-      <p id="status" role="status"></p>
-    </fieldset>
-  </section>
-  <section class="preview" aria-label="Cover preview">
-    <canvas id="cover" width="1080" height="1080"></canvas>
-    <p class="hint">Preview — the exported PNG renders at full post size.</p>
-  </section>
-</main>
+    <section class="block">
+      <h2>6 · Export</h2>
+      <div id="sizeRow" class="choices"></div>
+      <button id="exportBtn" type="button" class="export-btn">Export PNG</button>
+      <p id="note" role="status"></p>
+    </section>
+  </aside>
+
+  <figure class="stage" aria-label="Cover preview">
+    <canvas id="poster" width="1080" height="1080"></canvas>
+    <figcaption class="caption">Preview — the exported PNG renders at full post size.</figcaption>
+  </figure>
+</div>
 <script type="module" src="./src/main.js"></script>
 </body>
 </html>
