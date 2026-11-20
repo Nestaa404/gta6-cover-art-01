@@ -1,48 +1,39 @@
-html, body { margin: 0; min-height: 100%; background: #120b22; color: #f4eefc; font: 15px/1.45 system-ui, sans-serif; }
-.app { display: flex; gap: 28px; align-items: flex-start; justify-content: center; padding: 24px; box-sizing: border-box; max-width: 1400px; margin: 0 auto; }
-.controls { display: flex; flex-direction: column; gap: 16px; width: 340px; flex: none; }
-.controls header h1 {
-  margin: 0 0 6px; font-size: 30px; letter-spacing: 0.5px;
-  background: linear-gradient(90deg, #ffd76a, #ff5e8a 60%, #7df9ff);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.controls header p { margin: 0; color: #c9b8e8; }
-fieldset { border: 1px solid #3a2a5e; border-radius: 10px; padding: 12px 14px; margin: 0; background: #1a1030; }
-legend { font-weight: 700; color: #ffd76a; padding: 0 6px; }
-label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; margin-bottom: 8px; }
-input[type=text] { font: inherit; padding: 8px 10px; border: 1px solid #4a3a72; border-radius: 6px; background: #241a42; color: #fff; }
-input[type=range] { accent-color: #ff5e8a; }
-button { font: inherit; font-weight: 700; padding: 9px 12px; border: 1px solid #4a3a72; border-radius: 6px; background: #241a42; color: #f4eefc; cursor: pointer; }
-button:hover { border-color: #ff5e8a; }
-button:focus-visible, input:focus-visible { outline: 2px solid #7df9ff; outline-offset: 2px; }
-button.primary { width: 100%; background: linear-gradient(90deg, #ff5e8a, #ff9a3d); border: 0; color: #1a0b2e; font-size: 16px; padding: 12px; }
-button.primary:hover { filter: brightness(1.1); }
-.options { display: flex; flex-wrap: wrap; gap: 8px; }
-.options button.on { background: #ff5e8a; border-color: #ff5e8a; color: #1a0b2e; }
-.hint { margin: 6px 0 0; color: #9d8cc4; font-size: 13px; }
-#status, #panel-photo { margin: 8px 0 0; color: #7df9ff; min-height: 1.2em; }
-.slots { display: flex; gap: 10px; }
-.slot { flex: 1; display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
-.slot input[type=file] { display: none; }
-.slot .thumb {
-  display: flex; align-items: center; justify-content: center;
-  height: 64px; border: 2px dashed #4a3a72; border-radius: 8px; cursor: pointer;
-  font-size: 22px; font-weight: 900; color: #c9b8e8;
-  background-size: cover; background-position: center;
-}
-.slot .thumb:hover { border-color: #ff5e8a; }
-.slot-name { font-size: 12px; color: #9d8cc4; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.slot .fill-all { font-size: 12px; padding: 6px 4px; }
-.preview { flex: 1; display: flex; flex-direction: column; gap: 14px; align-items: center; position: sticky; top: 24px; }
-.preview canvas { max-width: 100%; max-height: calc(100vh - 140px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55); border-radius: 4px; cursor: grab; touch-action: none; }
-.preview canvas:active { cursor: grabbing; }
-.samples { display: flex; gap: 8px; align-items: center; color: #c9b8e8; flex-wrap: wrap; justify-content: center; }
-body.shot-cover .controls, body.shot-cover .samples { display: none; }
-body.shot-cover .app { padding: 0; max-width: none; }
-body.shot-cover .preview { position: static; }
-body.shot-cover canvas { max-width: none; max-height: none; width: 100vw; height: 100vh; object-fit: contain; box-shadow: none; border-radius: 0; background: #0d0819; }
+/* Neon Coast Cover Studio — dark neon editor chrome around a bright cover. */
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: #12081f; color: #f5f0fa; font: 15px/1.45 system-ui, -apple-system, sans-serif; }
+.app { display: flex; gap: 28px; align-items: flex-start; justify-content: center; padding: 24px; }
+.controls { width: 340px; flex: none; display: flex; flex-direction: column; gap: 16px; }
+.controls h1 { margin: 0; font-size: 30px; line-height: 1.05; font-style: italic; font-weight: 900; text-transform: uppercase; color: #ffd166; }
+.controls h1 span { display: block; color: #ff2e63; }
+.lede { margin: 0; color: #c9b8dd; }
+fieldset { margin: 0; padding: 12px; border: 1px solid #4a2b6b; border-radius: 10px; background: #1b0f2e; }
+legend { font-weight: 800; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: #7df9ff; padding: 0 6px; }
+.picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.pick, .tab, button { font: inherit; font-weight: 700; padding: 8px 10px; border: 1px solid #6b4a94; border-radius: 8px; background: #2a1845; color: #f5f0fa; cursor: pointer; }
+.pick:hover, .tab:hover, button:hover { border-color: #ff2e63; }
+.pick.active, .tab.active { background: #ff2e63; border-color: #ff2e63; color: #fff; }
+.row { display: flex; gap: 8px; margin-top: 8px; }
+.row > * { flex: 1; }
+.panel-tabs { display: flex; gap: 8px; }
+.panel-tabs .tab { flex: 1; }
+.file-label { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; font-weight: 700; }
+label { display: flex; flex-direction: column; gap: 6px; font-weight: 700; margin-top: 8px; }
+label:first-child { margin-top: 0; }
+label span { font-weight: 400; color: #c9b8dd; }
+input[type=text], select { font: inherit; padding: 8px; border: 1px solid #6b4a94; border-radius: 8px; background: #12081f; color: #f5f0fa; }
+input[type=range] { width: 100%; accent-color: #ff2e63; }
+.export { width: 100%; padding: 12px; font-size: 17px; background: #ffd166; border-color: #ffd166; color: #12081f; }
+.export:hover { border-color: #fff; }
+#status { margin: 8px 0 0; min-height: 1.4em; color: #7df9ff; }
+.preview { flex: 1; max-width: 760px; position: sticky; top: 24px; }
+#cover { width: 100%; height: auto; display: block; box-shadow: 0 12px 44px rgba(0, 0, 0, 0.55); background: #1b0f2e; }
+.hint { color: #c9b8dd; text-align: center; }
+body.shot-cover .controls, body.shot-cover .hint { display: none; }
+body.shot-cover .app { padding: 0; }
+body.shot-cover .preview { max-width: none; position: static; }
+body.shot-cover #cover { width: 100vw; height: 100vh; object-fit: contain; box-shadow: none; background: #12081f; }
 @media (max-width: 900px) {
   .app { flex-direction: column; }
   .controls { width: 100%; }
-  .preview { position: static; }
+  .preview { position: static; max-width: none; width: 100%; }
 }

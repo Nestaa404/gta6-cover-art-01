@@ -1,20 +1,26 @@
-// A tiny static server for app/ (Node 22, standard library only), so an entry can be tried
-// locally without a build step: `node serve.ts` serves app/ on http://localhost:8080.
-// It sends the MIME types an offline web app needs, refuses any path outside app/, and otherwise
-// does nothing clever: this is a development convenience, not a web server for the internet.
-// Rebuilt in the recorded session; behaviour unchanged from the starter's server.
+// Neon Coast Cover Studio — a tiny static server for local tries.
+//
+// Serves this directory's app/ on http://localhost:8080 with no build step:
+//
+//   node serve.ts [--port 8080]
+//
+// It only ever serves files under app/, sends the MIME types an offline
+// web app needs, and refuses paths that escape the folder. Node 22+,
+// standard library only. A development convenience, not a public server.
+
 import { createReadStream, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = resolve(fileURLToPath(new URL('./app', import.meta.url)));
-const args = process.argv.slice(2);
-const portIndex = args.indexOf('--port');
-const requested = portIndex === -1 ? 8080 : Number(args[portIndex + 1]);
-const port = Number.isInteger(requested) && requested > 0 && requested < 65536 ? requested : 8080;
+const appRoot = resolve(fileURLToPath(new URL('./app', import.meta.url)));
 
-const MIME: Record<string, string> = {
+const cliArgs = process.argv.slice(2);
+const portFlag = cliArgs.indexOf('--port');
+const wanted = portFlag === -1 ? 8080 : Number(cliArgs[portFlag + 1]);
+const port = Number.isInteger(wanted) && wanted > 0 && wanted < 65536 ? wanted : 8080;
+
+const mimeByExt: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
   '.mjs': 'text/javascript; charset=utf-8',
@@ -31,16 +37,12 @@ const MIME: Record<string, string> = {
   '.woff': 'font/woff',
   '.ttf': 'font/ttf',
   '.otf': 'font/otf',
-  '.bin': 'application/octet-stream',
   '.wasm': 'application/wasm',
-  '.wav': 'audio/wav',
-  '.mp3': 'audio/mpeg',
-  '.ogg': 'audio/ogg',
   '.txt': 'text/plain; charset=utf-8',
 };
 
-createServer((request, response) => {
-  const url = new URL(request.url ?? '/', 'http://localhost');
+const server = createServer((request, response) => {
+  const url = new URL(request.url ?? '/', 'http://127.0.0.1');
   let pathname: string;
   try {
     pathname = decodeURIComponent(url.pathname);
@@ -49,8 +51,8 @@ createServer((request, response) => {
     return;
   }
   if (pathname.endsWith('/')) pathname += 'index.html';
-  const file = resolve(join(root, normalize(pathname)));
-  if (file !== root && !file.startsWith(root + sep)) {
+  const file = resolve(join(appRoot, normalize(pathname)));
+  if (file !== appRoot && !file.startsWith(appRoot + sep)) {
     response.writeHead(403).end('forbidden');
     return;
   }
@@ -64,11 +66,13 @@ createServer((request, response) => {
     return;
   }
   response.writeHead(200, {
-    'content-type': MIME[extname(file).toLowerCase()] ?? 'application/octet-stream',
+    'content-type': mimeByExt[extname(file).toLowerCase()] ?? 'application/octet-stream',
     'content-length': size,
     'cache-control': 'no-store',
   });
   createReadStream(file).pipe(response);
-}).listen(port, '127.0.0.1', () => {
-  console.log(`app/ is on http://localhost:${port}`);
+});
+
+server.listen(port, '127.0.0.1', () => {
+  console.log(`Neon Coast Cover Studio is on http://localhost:${port}`);
 });
