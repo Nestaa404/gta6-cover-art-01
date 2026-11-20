@@ -29,4 +29,5 @@ Run it:
 mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 ```
 
-Built by Brio and sub-agents for @anesta-s-kurniawansyah.
+Built by Brio and sub-agents for @anesta-s-kurniawansyah. Rebuilt in a
+recorded session for bounty `gta6-cover-art-01` (deadline 21 Nov 2026).

@@ -176,6 +176,8 @@ canvas.addEventListener('pointermove', (e) => {
   redraw();
 });
 canvas.addEventListener('pointerup', () => { drag = null; });
+canvas.addEventListener('pointercancel', () => { drag = null; });
+canvas.addEventListener('pointerleave', () => { drag = null; });
 
 // Export: render at full export resolution and download the PNG.
 document.getElementById('export').addEventListener('click', () => {

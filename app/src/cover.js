@@ -25,7 +25,9 @@ export const GRADES = {
 
 // Per-grade photo filter (canvas filter string) and the tint gradients laid
 // over each panel afterwards. All grades push saturation and warm/cool
-// contrast the way a Vice City sunset poster does.
+// contrast the way a Vice City sunset poster does. Rebuilt in the recorded
+// session: same four grades, same wash order, kept identical on purpose so
+// the preview and the export never disagree.
 const GRADE_STYLE = {
   sunset: {
     filter: 'saturate(1.4) contrast(1.08) sepia(0.22) brightness(1.03)',
@@ -242,7 +244,6 @@ function drawTagPill(ctx, w, h, state, grade) {
   const tag = (state.tag || '').trim().toUpperCase();
   if (!tag) return;
   const padX = w * 0.02;
-  const padY = h * 0.014;
   const fs = Math.max(14, Math.min(w, h) * 0.026);
   const family = `'Arial Black', 'Liberation Sans', 'DejaVu Sans', sans-serif`;
   ctx.font = `900 ${fs}px ${family}`;

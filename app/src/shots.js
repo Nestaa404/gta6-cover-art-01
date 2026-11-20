@@ -2,7 +2,9 @@
 // photos loaded; ?shot=cover shows the cover alone, at the export size the
 // `size` query names. Query knobs: photo slots via `photos` (comma list of
 // sample names), `layout`, `grade`, `title`, `subtitle`, `tag`, `size`.
-// window.__shotReady is set once the scene is painted.
+// window.__shotReady is set once the scene is painted. The double
+// requestAnimationFrame gives the canvas one full paint before the flag
+// flips, so a screenshot never catches a half-drawn cover.
 import { SIZES } from './cover.js';
 
 export async function runShot(shot, query, load, state) {

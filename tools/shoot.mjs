@@ -2,6 +2,7 @@
 //   node tools/shoot.mjs [port] [cdp-port]
 // Writes screenshots/<name> as JPEG (quality 88). Chrome must already run with
 // --remote-debugging-port=<cdp-port> and the WebGL domain policy switches.
+// Rebuilt in the recorded session; same CDP flow, same shot list from shots.json.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
